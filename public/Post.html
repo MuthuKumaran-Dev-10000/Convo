@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Video</title>
+</head>
+<body>
+    <h1>Upload Video</h1>
+    <form id="uploadForm">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description"></textarea><br>
+        <label for="channelId">Channel ID:</label><br>
+        <input type="text" id="channelId" name="channelId"><br>
+        <label for="videoFile">Choose a video file:</label><br>
+        <input type="file" id="videoFile" name="videoFile"><br>
+        <input type="submit" value="Upload">
+    </form>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const channelId = document.getElementById('channelId').value;
+            const videoFile = document.getElementById('videoFile').files[0];
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('channelId', channelId);
+            formData.append('videoFile', videoFile);
+
+            try {
+                const response = await fetch('/uploadVideo', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                console.log(data.message);
+            } catch (error) {
+                console.error('Error uploading video:', error);
+            }
+        });
+    </script>
+</body>
+</html>
